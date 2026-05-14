@@ -52,7 +52,7 @@
   main {
     max-width: 880px;
     margin: 0 auto;
-    padding: 96px 32px 96px;
+    padding: 56px 32px 96px;
   }
 
   /* ── Venue badge: dark red, sharp ─────────────────────── */
@@ -67,7 +67,7 @@
     background: var(--accent);
     padding: 6px 11px 5px;
     border-radius: 0;
-    margin-bottom: 32px;
+    margin-bottom: 20px;
   }
 
   /* ── Title: Fraunces display ─────────────────────────── */
@@ -78,7 +78,7 @@
     font-variation-settings: "SOFT" 100, "opsz" 38;
     letter-spacing: -0.018em;
     line-height: 1.15;
-    margin: 0 0 24px;
+    margin: 0 0 18px;
     color: var(--ink);
   }
 
@@ -105,7 +105,7 @@
     font-variation-settings: "SOFT" 100, "opsz" 14;
     line-height: 1.55;
     color: var(--muted);
-    margin: 0 0 40px;
+    margin: 0 0 28px;
   }
 
   /* ── Links: bordered rectangles with icons ───────────── */
@@ -114,8 +114,19 @@
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 64px;
-    padding-bottom: 48px;
-    border-bottom: 1px solid var(--accent);
+    padding-bottom: 0;
+    border-bottom: none;
+    position: relative;
+  }
+
+  nav.links::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -32px;
+    width: 56px;
+    height: 3px;
+    background: var(--accent);
   }
 
   nav.links a {
