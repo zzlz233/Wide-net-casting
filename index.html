@@ -52,22 +52,22 @@
   main {
     max-width: 880px;
     margin: 0 auto;
-    padding: 100px 32px 120px;
+    padding: 96px 32px 96px;
   }
 
   /* ── Venue badge: dark red, sharp ─────────────────────── */
   .venue {
     display: inline-block;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: 500;
-    letter-spacing: 0.18em;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: #fff;
     background: var(--accent);
-    padding: 5px 10px 4px;
+    padding: 6px 11px 5px;
     border-radius: 0;
-    margin-bottom: 36px;
+    margin-bottom: 32px;
   }
 
   /* ── Title: Fraunces display ─────────────────────────── */
@@ -78,9 +78,34 @@
     font-variation-settings: "SOFT" 100, "opsz" 38;
     letter-spacing: -0.018em;
     line-height: 1.15;
-    margin: 0 0 56px;
+    margin: 0 0 24px;
     color: var(--ink);
-    text-wrap: balance;
+  }
+
+  /* ── Authors & affiliation ────────────────────────────── */
+  .authors {
+    font-family: var(--serif);
+    font-size: 17px;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 100, "opsz" 17;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .authors .sep {
+    margin: 0 0.55em;
+    color: var(--soft);
+    user-select: none;
+  }
+  .affiliations {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 100, "opsz" 14;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 40px;
   }
 
   /* ── Links: bordered rectangles with icons ───────────── */
@@ -88,7 +113,9 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 80px;
+    margin-bottom: 64px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--accent);
   }
 
   nav.links a {
@@ -96,21 +123,22 @@
     align-items: center;
     gap: 8px;
     font-family: var(--mono);
-    font-size: 11.5px;
-    font-weight: 500;
+    font-size: 12px;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ink);
     background: transparent;
-    border: 1px solid var(--ink);
-    padding: 8px 16px 7px;
+    border: 1.5px solid var(--ink);
+    padding: 9px 18px 8px;
     text-decoration: none;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.18s, color 0.18s, transform 0.18s;
   }
 
   nav.links a:hover {
     background: var(--ink);
     color: var(--bg);
+    transform: translateY(-1px);
   }
 
   nav.links a svg {
@@ -124,9 +152,10 @@
   }
 
   /* ── Section ──────────────────────────────────────────── */
-  section { margin-bottom: 64px; scroll-margin-top: 24px; }
+  section { margin-bottom: 64px; scroll-margin-top: 32px; }
 
   h2 {
+    position: relative;
     font-family: var(--serif);
     font-size: 19px;
     font-weight: 500;
@@ -146,7 +175,7 @@
   }
 
   figure.teaser {
-    margin: 0 0 80px;
+    margin: 0;
   }
 
   figure.teaser img {
@@ -198,8 +227,8 @@
 
   .warning {
     display: block;
-    margin-top: 20px;
-    padding: 10px 14px;
+    margin-top: 24px;
+    padding: 12px 16px;
     border-left: 4px solid var(--accent);
     background: rgba(140, 28, 28, 0.08);
     font-family: var(--sans);
@@ -258,7 +287,7 @@
 
   /* ── Figure caption ───────────────────────────────────── */
   figure.teaser figcaption {
-    margin-top: 14px;
+    margin-top: 16px;
     font-size: 13px;
     line-height: 1.55;
     color: var(--muted);
@@ -292,7 +321,7 @@
 
   .table-wrap {
     overflow-x: auto;
-    margin: 0 0 36px;
+    margin: 0 0 40px;
   }
 
   .table-wrap:last-child { margin-bottom: 0; }
@@ -308,7 +337,7 @@
   table.results caption {
     caption-side: top;
     text-align: left;
-    padding: 0 0 14px;
+    padding: 0 0 16px;
     font-family: var(--sans);
     font-size: 13px;
     line-height: 1.55;
@@ -427,35 +456,47 @@
 
   button.copy {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    top: 10px;
+    right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--bg);
     color: var(--muted);
     border: 1px solid var(--rule);
     border-radius: 0;
-    padding: 5px 10px;
+    padding: 6px;
     cursor: pointer;
     transition: color 0.15s, border-color 0.15s, background 0.15s;
   }
+  button.copy svg {
+    width: 15px;
+    height: 15px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  button.copy .check-icon { display: none; }
+  button.copy.copied .copy-icon { display: none; }
+  button.copy.copied .check-icon { display: inline-block; }
   button.copy:hover {
     color: var(--ink);
     border-color: var(--ink);
     background: var(--bg-paper);
   }
-  button.copy.copied {
+  button.copy.copied,
+  button.copy.copied:hover {
     color: var(--accent);
     border-color: var(--accent);
+    background: var(--bg);
   }
 
   /* ── Footer ───────────────────────────────────────────── */
   footer {
     margin-top: 96px;
-    padding-top: 24px;
+    padding-top: 32px;
     border-top: 1px solid var(--rule);
     font-family: var(--sans);
     font-size: 13px;
@@ -477,6 +518,101 @@
     color: var(--bg);
   }
 
+  /* ── Reading progress bar ─────────────────────────────── */
+  #progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--accent);
+    z-index: 100;
+    transition: width 0.06s linear;
+    pointer-events: none;
+  }
+
+  /* ── Sticky TOC ───────────────────────────────────────── */
+  aside.toc {
+    position: fixed;
+    top: 50%;
+    left: 32px;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: none;
+  }
+  @media (min-width: 1200px) {
+    aside.toc { display: block; }
+  }
+  aside.toc ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  aside.toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--soft);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  aside.toc a::before {
+    content: "";
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.25s ease, background 0.25s ease;
+  }
+  aside.toc a:hover { color: var(--ink); }
+  aside.toc a.active { color: var(--ink); }
+  aside.toc a.active::before {
+    width: 28px;
+    background: var(--accent);
+  }
+
+  /* ── h2 anchor § ──────────────────────────────────────── */
+  h2 a.anchor {
+    position: absolute;
+    left: -0.85em;
+    top: 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-style: normal;
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0.55;
+    transition: opacity 0.18s;
+    line-height: inherit;
+  }
+  h2:hover a.anchor,
+  h2 a.anchor:focus { opacity: 1; }
+  @media (max-width: 1080px) {
+    h2 a.anchor { display: none; }
+  }
+
+  /* ── Section fade-in on scroll ────────────────────────── */
+  main > section {
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  main > section.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    main > section { opacity: 1; transform: none; transition: none; }
+    #progress { display: none; }
+  }
+
   /* ── Mobile ───────────────────────────────────────────── */
   @media (max-width: 600px) {
     main { padding: 56px 22px 80px; }
@@ -488,34 +624,54 @@
 </head>
 
 <body>
+
+<div id="progress"></div>
+
+<aside class="toc" aria-label="Table of contents">
+  <ol>
+    <li><a href="#scenario">Scenario</a></li>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#contributions">Contributions</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#bibtex">Citation</a></li>
+  </ol>
+</aside>
+
 <main>
 
   <span class="venue">ICML 2026</span>
 
   <h1 class="title">New Wide-Net-Casting Jailbreak Attacks Risk Large Models</h1>
 
+  <div class="authors">
+    <span class="name">Qiuchi Xiang</span>
+    <span class="sep">·</span>
+    <span class="name">Haoxuan Qu</span>
+    <span class="sep">·</span>
+    <span class="name">Hossein Rahmani</span>
+    <span class="sep">·</span>
+    <span class="name">Jun Liu</span>
+  </div>
+  <div class="affiliations">Lancaster University</div>
+
   <nav class="links">
     <a href="[ARXIV_URL]" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M21 3l-9 9"/><path d="M21 14v7H3V3h7"/></svg>
       arXiv
     </a>
-    <a href="[OPENREVIEW_URL]" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-      Paper
-    </a>
     <a href="[GITHUB_URL]" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
       Code
     </a>
-    <a href="#bibtex">
+    <a href="#bibtex" onclick="copyBibtexFromNav()">
       <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
       BibTeX
     </a>
   </nav>
 
   <!-- ── Scenario figure ──────────────────────────────── -->
-  <section>
-    <h2>Wide-Net-Casting Jailbreak Attack Scenario</h2>
+  <section id="scenario">
+    <h2><a class="anchor" href="#scenario" aria-hidden="true">§</a>Our New Wide-Net-Casting Jailbreak Attack Scenario</h2>
     <figure class="teaser">
       <img src="Fig1.png" alt="Figure 1: Illustration of the single-model jailbreak scenario and the wide-net-casting jailbreak scenario.">
       <figcaption>
@@ -524,8 +680,8 @@
     </figure>
   </section>
 
-  <section>
-    <h2>Abstract</h2>
+  <section id="abstract">
+    <h2><a class="anchor" href="#abstract" aria-hidden="true">§</a>Abstract</h2>
     <p class="abstract">
       J<span class="lede">ailbreak</span> attacks on large models have drawn growing attention due to
       their close ties to societal safety. This work identifies a practical
@@ -544,16 +700,16 @@
   </section>
 
   <!-- ── Contributions ────────────────────────────────── -->
-  <section>
-    <h2>Contributions</h2>
+  <section id="contributions">
+    <h2><a class="anchor" href="#contributions" aria-hidden="true">§</a>Contributions</h2>
     <ol class="tldr">
       <li><div>We are the first to reveal the previously unexplored <b>wide-net-casting jailbreak scenario</b>, and through comprehensive analysis, we uncover its previously overlooked safety risks.</div></li>
-      <li><div>As a key part of analysis, we propose <b>a novel jailbreak method tailored to this scenario</b>, thereby more comprehensively exposing the underlying risks of wide-net-casting attacks.</div></li>
+      <li><div>As a key part of analysis, we propose a novel <b>jailbreak method tailored to this scenario</b>, thereby more comprehensively exposing the underlying risks of wide-net-casting attacks.</div></li>
     </ol>
   </section>
 
-  <section>
-    <h2>Main Results</h2>
+  <section id="results">
+    <h2><a class="anchor" href="#results" aria-hidden="true">§</a>Main Results</h2>
 
     <div class="table-wrap">
       <table class="results">
@@ -683,9 +839,12 @@
   </section>
 
   <section id="bibtex">
-    <h2>Citation</h2>
+    <h2><a class="anchor" href="#bibtex" aria-hidden="true">§</a>Citation</h2>
     <div class="bibtex-wrap">
-      <button class="copy" onclick="copyBibtex(this)">Copy</button>
+      <button class="copy" onclick="copyBibtex(this)" aria-label="Copy BibTeX">
+        <svg class="copy-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <svg class="check-icon" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      </button>
 <pre class="bibtex">@inproceedings{xiang2026widenet,
   title     = {New Wide-Net-Casting Jailbreak Attacks Risk Large Models},
   author    = {Xiang, Qiuchi and Qu, Haoxuan and Rahmani, Hossein and Liu, Jun},
@@ -706,14 +865,67 @@
   function copyBibtex(btn) {
     const text = document.querySelector('pre.bibtex').innerText;
     navigator.clipboard.writeText(text).then(() => {
-      btn.textContent = 'Copied';
       btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'Copy';
+      clearTimeout(btn._copyTimer);
+      btn._copyTimer = setTimeout(() => {
         btn.classList.remove('copied');
-      }, 1800);
+      }, 2200);
     });
   }
+
+  function copyBibtexFromNav() {
+    const btn = document.querySelector('button.copy');
+    if (btn) copyBibtex(btn);
+    // Do NOT preventDefault — let the anchor jump to #bibtex
+  }
+
+  // Reading progress bar
+  (function () {
+    const bar = document.getElementById('progress');
+    if (!bar) return;
+    let ticking = false;
+    function update() {
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+      bar.style.width = pct + '%';
+      ticking = false;
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
+  })();
+
+  // Section fade-in + TOC scroll-spy
+  (function () {
+    const sections = document.querySelectorAll('main > section');
+    const tocLinks = document.querySelectorAll('aside.toc a');
+    if (!sections.length) return;
+
+    const fadeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in-view');
+          fadeObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    sections.forEach(s => fadeObs.observe(s));
+
+    if (tocLinks.length) {
+      const spyObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && e.target.id) {
+            tocLinks.forEach(a => {
+              a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id);
+            });
+          }
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      sections.forEach(s => { if (s.id) spyObs.observe(s); });
+    }
+  })();
 </script>
 </body>
 </html>
