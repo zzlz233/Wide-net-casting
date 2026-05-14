@@ -12,7 +12,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
   :root {
@@ -31,7 +31,11 @@
   }
 
   * { box-sizing: border-box; }
-  html { -webkit-font-smoothing: antialiased; }
+  html {
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+    hanging-punctuation: first last;
+  }
 
   body {
     margin: 0;
@@ -42,6 +46,7 @@
     font-size: 15px;
     line-height: 1.62;
     font-feature-settings: "kern", "liga", "ss01";
+    font-optical-sizing: auto;
   }
 
   main {
@@ -75,6 +80,7 @@
     line-height: 1.15;
     margin: 0 0 56px;
     color: var(--ink);
+    text-wrap: balance;
   }
 
   /* ── Links: bordered rectangles with icons ───────────── */
@@ -118,18 +124,20 @@
   }
 
   /* ── Section ──────────────────────────────────────────── */
-  section { margin-bottom: 64px; }
+  section { margin-bottom: 64px; scroll-margin-top: 24px; }
 
   h2 {
-    font-family: var(--mono);
-    font-size: 10.5px;
+    font-family: var(--serif);
+    font-size: 19px;
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    color: var(--muted);
+    font-variation-settings: "SOFT" 100, "opsz" 19;
+    letter-spacing: -0.012em;
+    text-transform: none;
+    color: var(--ink);
     margin: 0 0 24px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--rule);
+    text-wrap: balance;
   }
 
   /* ── Figure ───────────────────────────────────────────── */
@@ -154,7 +162,29 @@
     font-size: 15px;
     line-height: 1.72;
     color: var(--ink-soft);
-    text-align: left;
+    text-align: justify;
+    text-justify: inter-word;
+    text-wrap: pretty;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+
+  p.abstract::first-letter {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-variation-settings: "SOFT" 100, "opsz" 144;
+    font-size: 3.6em;
+    line-height: 0.88;
+    float: left;
+    margin: 6px 10px 0 0;
+    color: var(--ink);
+  }
+
+  p.abstract .lede {
+    font-variant-caps: all-small-caps;
+    font-feature-settings: "smcp", "c2sc";
+    letter-spacing: 0.04em;
+    color: var(--ink);
   }
 
   p.abstract em {
@@ -169,14 +199,14 @@
   .warning {
     display: block;
     margin-top: 20px;
-    padding-left: 14px;
-    border-left: 2px solid var(--accent);
-    font-family: var(--mono);
-    font-size: 11.5px;
-    line-height: 1.5;
-    letter-spacing: 0.02em;
+    padding: 10px 14px;
+    border-left: 4px solid var(--accent);
+    background: rgba(140, 28, 28, 0.08);
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.55;
     color: var(--accent);
-    text-transform: none;
   }
 
   /* ── TL;DR list ───────────────────────────────────────── */
@@ -195,6 +225,15 @@
     font-size: 15px;
     line-height: 1.6;
     color: var(--ink-soft);
+  }
+
+  ol.tldr li > div {
+    flex: 1;
+    text-align: justify;
+    text-justify: inter-word;
+    text-wrap: pretty;
+    hyphens: auto;
+    -webkit-hyphens: auto;
   }
 
   ol.tldr li::before {
@@ -223,12 +262,16 @@
     font-size: 13px;
     line-height: 1.55;
     color: var(--muted);
-    text-align: left;
+    text-align: justify;
+    text-justify: inter-word;
+    text-wrap: pretty;
+    hyphens: auto;
+    -webkit-hyphens: auto;
   }
 
   figure.teaser figcaption b {
     color: var(--ink);
-    font-weight: 600;
+    font-weight: 400;
     font-family: var(--serif);
     font-variation-settings: "SOFT" 100, "opsz" 14;
   }
@@ -257,8 +300,9 @@
   table.results {
     width: 100%;
     border-collapse: collapse;
-    font-family: var(--mono);
-    font-size: 11.5px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
   }
 
   table.results caption {
@@ -273,7 +317,7 @@
 
   table.results caption b {
     color: var(--ink);
-    font-weight: 600;
+    font-weight: 400;
     font-family: var(--serif);
     font-variation-settings: "SOFT" 100, "opsz" 14;
     margin-right: 4px;
@@ -300,12 +344,12 @@
 
   table.results thead th {
     font-weight: 500;
-    font-size: 10.5px;
-    letter-spacing: 0.03em;
+    font-size: 12px;
+    letter-spacing: 0;
     color: var(--muted);
     padding: 5px 10px;
     white-space: normal;
-    line-height: 1.3;
+    line-height: 1.35;
     vertical-align: middle;
   }
 
@@ -322,19 +366,20 @@
   }
 
   /* Rule under all column sub-headers */
-  table.results thead tr:last-child th {
-    border-bottom: 1px solid var(--rule);
+  table.results thead tr:last-child th,
+  table.results thead th[rowspan] {
+    border-bottom: 1.5px solid var(--ink);
     padding-top: 5px;
     padding-bottom: 6px;
   }
 
   table.results tbody td {
     color: var(--ink-soft);
-    border-bottom: 1px solid var(--rule-soft);
   }
 
   /* Section divider between non-final tbodies (e.g. AdvBench → MM-SafetyBench) */
-  table.results tbody:not(:last-of-type) tr:last-child td {
+  table.results tbody:not(:last-of-type) tr:last-child td,
+  table.results tbody:not(:last-of-type) td.dataset {
     border-bottom: 1px solid var(--rule);
   }
 
@@ -412,10 +457,9 @@
     margin-top: 96px;
     padding-top: 24px;
     border-top: 1px solid var(--rule);
-    font-family: var(--mono);
-    font-size: 11.5px;
+    font-family: var(--sans);
+    font-size: 13px;
     line-height: 1.65;
-    letter-spacing: 0.02em;
     color: var(--muted);
   }
 
@@ -483,7 +527,7 @@
   <section>
     <h2>Abstract</h2>
     <p class="abstract">
-      Jailbreak attacks on large models have drawn growing attention due to
+      J<span class="lede">ailbreak</span> attacks on large models have drawn growing attention due to
       their close ties to societal safety. This work identifies a practical
       yet unexplored jailbreak scenario, the <em>wide-net-casting scenario</em>,
       where an adversary can query a group of large models instead of a
@@ -495,7 +539,7 @@
       targeting the large models without additional safeguards, exposing
       wide-net-casting as a distinct, high-risk scenario that warrants
       attention in future evaluation and defense research.
-      <span class="warning">Warning &mdash; this paper contains potentially harmful example text.</span>
+      <span class="warning">Warning: this paper contains potentially harmful example text.</span>
     </p>
   </section>
 
