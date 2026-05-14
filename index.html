@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Wide-Net-Casting Jailbreak Attacks Risk Large Models — ICML 2026</title>
+<meta name="description" content="ICML 2026 paper identifying the wide-net-casting jailbreak scenario, where adversaries query a group of large models to amplify safety risks.">
+
+<meta property="og:title" content="New Wide-Net-Casting Jailbreak Attacks Risk Large Models">
+<meta property="og:description" content="ICML 2026. A previously unexplored jailbreak scenario where querying a group of large models can amplify safety risks beyond the single-model setting.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --bg-paper: #fdfdfb;
+    --ink: #0a0a0a;
+    --ink-soft: #1a1a1a;
+    --muted: #525252;
+    --soft: #8c8c89;
+    --rule: #d8d8d3;
+    --rule-soft: #e8e8e3;
+    --accent: #8c1c1c;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--ink-soft);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.62;
+    font-feature-settings: "kern", "liga", "ss01";
+  }
+
+  main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 100px 32px 120px;
+  }
+
+  /* ── Venue badge: dark red, sharp ─────────────────────── */
+  .venue {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--accent);
+    padding: 5px 10px 4px;
+    border-radius: 0;
+    margin-bottom: 36px;
+  }
+
+  /* ── Title: Fraunces display ─────────────────────────── */
+  h1.title {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 500;
+    font-variation-settings: "SOFT" 100, "opsz" 38;
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+    margin: 0 0 56px;
+    color: var(--ink);
+  }
+
+  /* ── Links: bordered rectangles with icons ───────────── */
+  nav.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 80px;
+  }
+
+  nav.links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--ink);
+    padding: 8px 16px 7px;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  nav.links a:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  nav.links a svg {
+    width: 13px;
+    height: 13px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* ── Section ──────────────────────────────────────────── */
+  section { margin-bottom: 64px; }
+
+  h2 {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--muted);
+    margin: 0 0 24px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* ── Figure ───────────────────────────────────────────── */
+  h2.figure-title {
+    margin-bottom: 24px;
+  }
+
+  figure.teaser {
+    margin: 0 0 80px;
+  }
+
+  figure.teaser img {
+    display: block;
+    width: 70%;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  /* ── Abstract ─────────────────────────────────────────── */
+  p.abstract {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.72;
+    color: var(--ink-soft);
+    text-align: left;
+  }
+
+  p.abstract em {
+    /* Italic phrases pop in serif against sans body */
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 100, "opsz" 16;
+    color: var(--ink);
+  }
+
+  .warning {
+    display: block;
+    margin-top: 20px;
+    padding-left: 14px;
+    border-left: 2px solid var(--accent);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    color: var(--accent);
+    text-transform: none;
+  }
+
+  /* ── TL;DR list ───────────────────────────────────────── */
+  ol.tldr {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: hl;
+  }
+
+  ol.tldr li {
+    counter-increment: hl;
+    display: flex;
+    gap: 20px;
+    padding: 12px 0;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  ol.tldr li::before {
+    content: counter(hl, decimal-leading-zero);
+    flex-shrink: 0;
+    width: 30px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--soft);
+    padding-top: 3px;
+  }
+
+  ol.tldr em {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "SOFT" 100, "opsz" 16;
+    color: var(--ink);
+  }
+
+  /* ── Figure caption ───────────────────────────────────── */
+  figure.teaser figcaption {
+    margin-top: 14px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+    text-align: left;
+  }
+
+  figure.teaser figcaption b {
+    color: var(--ink);
+    font-weight: 600;
+    font-family: var(--serif);
+    font-variation-settings: "SOFT" 100, "opsz" 14;
+  }
+
+  /* ── Results tables ───────────────────────────────────── */
+  .results-intro {
+    margin: 0 0 28px;
+    font-size: 15px;
+    line-height: 1.72;
+    color: var(--ink-soft);
+  }
+
+  .results-intro em {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 0 0 36px;
+  }
+
+  .table-wrap:last-child { margin-bottom: 0; }
+
+  table.results {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 11.5px;
+  }
+
+  table.results caption {
+    caption-side: top;
+    text-align: left;
+    padding: 0 0 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  table.results caption b {
+    color: var(--ink);
+    font-weight: 600;
+    font-family: var(--serif);
+    font-variation-settings: "SOFT" 100, "opsz" 14;
+    margin-right: 4px;
+  }
+
+  table.results th,
+  table.results td {
+    padding: 4px 10px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    line-height: 1.3;
+  }
+
+  /* Label cells: rowspan headers in thead (Dataset, Attack) — left-aligned, inherits mono */
+  table.results thead th[rowspan] {
+    text-align: left;
+  }
+
+  /* Label cells: method names in tbody — left-aligned, inherits mono */
+  table.results td.method {
+    text-align: left;
+  }
+
+  table.results thead th {
+    font-weight: 500;
+    font-size: 10.5px;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    padding: 5px 10px;
+    white-space: normal;
+    line-height: 1.3;
+    vertical-align: middle;
+  }
+
+  /* Toprule */
+  table.results thead tr:first-child th {
+    border-top: 2px solid var(--ink);
+    padding-top: 7px;
+    padding-bottom: 5px;
+  }
+
+  /* Rule under the "WASR / W-Toxicity Score" spanning header */
+  table.results thead tr:first-child th[colspan] {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Rule under all column sub-headers */
+  table.results thead tr:last-child th {
+    border-bottom: 1px solid var(--rule);
+    padding-top: 5px;
+    padding-bottom: 6px;
+  }
+
+  table.results tbody td {
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+
+  /* Section divider between non-final tbodies (e.g. AdvBench → MM-SafetyBench) */
+  table.results tbody:not(:last-of-type) tr:last-child td {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Bottomrule extends under the dataset rowspan cell too */
+  table.results tbody:last-of-type tr:last-child td,
+  table.results tbody:last-of-type td.dataset {
+    border-bottom: 2px solid var(--ink);
+  }
+
+  table.results tr.ours td {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  table.results td.dataset {
+    text-align: left;
+    color: var(--muted);
+    vertical-align: middle;
+  }
+
+  .table-note {
+    margin: 8px 0 0;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: var(--soft);
+  }
+
+  /* ── BibTeX block ─────────────────────────────────────── */
+  .bibtex-wrap { position: relative; }
+
+  pre.bibtex {
+    background: var(--bg-paper);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 22px 24px;
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  button.copy {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: var(--bg);
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    border-radius: 0;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  button.copy:hover {
+    color: var(--ink);
+    border-color: var(--ink);
+    background: var(--bg-paper);
+  }
+  button.copy.copied {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  /* ── Footer ───────────────────────────────────────────── */
+  footer {
+    margin-top: 96px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    line-height: 1.65;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--rule-soft);
+    transition: border-color 0.15s;
+  }
+  footer a:hover { border-bottom-color: var(--ink); }
+
+  /* ── Selection accent ─────────────────────────────────── */
+  ::selection {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  /* ── Mobile ───────────────────────────────────────────── */
+  @media (max-width: 600px) {
+    main { padding: 56px 22px 80px; }
+    h1.title { font-size: 28px; margin-bottom: 40px; }
+    nav.links { gap: 20px; margin-bottom: 56px; }
+    figure.teaser img { width: 100%; }
+  }
+</style>
+</head>
+
+<body>
+<main>
+
+  <span class="venue">ICML 2026</span>
+
+  <h1 class="title">New Wide-Net-Casting Jailbreak Attacks Risk Large Models</h1>
+
+  <nav class="links">
+    <a href="[ARXIV_URL]" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M14 3h7v7"/><path d="M21 3l-9 9"/><path d="M21 14v7H3V3h7"/></svg>
+      arXiv
+    </a>
+    <a href="[OPENREVIEW_URL]" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      Paper
+    </a>
+    <a href="[GITHUB_URL]" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      Code
+    </a>
+    <a href="#bibtex">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      BibTeX
+    </a>
+  </nav>
+
+  <!-- ── Scenario figure ──────────────────────────────── -->
+  <section>
+    <h2>Wide-Net-Casting Jailbreak Attack Scenario</h2>
+    <figure class="teaser">
+      <img src="Fig1.png" alt="Figure 1: Illustration of the single-model jailbreak scenario and the wide-net-casting jailbreak scenario.">
+      <figcaption>
+        <b>Figure 1.</b> Illustration of the single-model jailbreak scenario and the wide-net-casting jailbreak scenario. In the wide-net-casting scenario, unlike the single-model case, successfully jailbreaking any one large model in the group is sufficient for the adversary to obtain a desired harmful response.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>Abstract</h2>
+    <p class="abstract">
+      Jailbreak attacks on large models have drawn growing attention due to
+      their close ties to societal safety. This work identifies a practical
+      yet unexplored jailbreak scenario, the <em>wide-net-casting scenario</em>,
+      where an adversary can query a group of large models instead of a
+      single one to elicit harmful outputs. Our analysis reveals substantial
+      yet previously overlooked safety risks under this scenario. As a key
+      part of our analysis, we further develop a novel jailbreak method
+      tailored to the wide-net-casting scenario. With this tailored method,
+      the jailbreak success rate can even reach 100% in some experiments when
+      targeting the large models without additional safeguards, exposing
+      wide-net-casting as a distinct, high-risk scenario that warrants
+      attention in future evaluation and defense research.
+      <span class="warning">Warning &mdash; this paper contains potentially harmful example text.</span>
+    </p>
+  </section>
+
+  <!-- ── Contributions ────────────────────────────────── -->
+  <section>
+    <h2>Contributions</h2>
+    <ol class="tldr">
+      <li><div>We are the first to reveal the previously unexplored <b>wide-net-casting jailbreak scenario</b>, and through comprehensive analysis, we uncover its previously overlooked safety risks.</div></li>
+      <li><div>As a key part of analysis, we propose a novel jailbreak method tailored to this scenario, thereby more comprehensively exposing the underlying risks of wide-net-casting attacks.</div></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Main Results</h2>
+
+    <div class="table-wrap">
+      <table class="results">
+        <caption><b>Table 5.</b> Evaluation of jailbreaking LLMs using different methods tailored to the wide-net-casting jailbreak scenario.</caption>
+        <thead>
+          <tr>
+            <th rowspan="2">Dataset</th>
+            <th rowspan="2">Attack</th>
+            <th colspan="3">WASR / W-Toxicity Score</th>
+          </tr>
+          <tr>
+            <th>Original Safety Alignment</th>
+            <th>Original Safety Alignment + SmoothLLM</th>
+            <th>Original Safety Alignment + RobustKV</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dataset" rowspan="4">AdvBench</td>
+            <td class="method">Baseline (ReMiss)</td>
+            <td>92.3% / 0.877</td>
+            <td>61.5% / 0.530</td>
+            <td>56.1% / 0.511</td>
+          </tr>
+          <tr>
+            <td class="method">Naive Strategy 1</td>
+            <td>95.1% / 0.902</td>
+            <td>64.1% / 0.574</td>
+            <td>59.2% / 0.550</td>
+          </tr>
+          <tr>
+            <td class="method">Naive Strategy 2</td>
+            <td>95.8% / 0.906</td>
+            <td>64.9% / 0.591</td>
+            <td>60.3% / 0.563</td>
+          </tr>
+          <tr class="ours">
+            <td class="method">Ours</td>
+            <td>100% / 0.941</td>
+            <td>76.7% / 0.724</td>
+            <td>72.8% / 0.686</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <table class="results">
+        <caption><b>Table 6.</b> Evaluation of jailbreaking MLLMs using different methods tailored to the wide-net-casting jailbreak scenario.</caption>
+        <thead>
+          <tr>
+            <th rowspan="2">Dataset</th>
+            <th rowspan="2">Attack</th>
+            <th colspan="4">WASR / W-Toxicity Score</th>
+          </tr>
+          <tr>
+            <th>Original Safety Alignment</th>
+            <th>Original Safety Alignment + VLGuard</th>
+            <th>Original Safety Alignment + IMMUNE</th>
+            <th>Original Safety Alignment + ASTRA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="dataset" rowspan="4">AdvBench</td>
+            <td class="method">Baseline (MLAI+PixArt-α)</td>
+            <td>93.3% / 0.867</td>
+            <td>37.5% / 0.311</td>
+            <td>36.9% / 0.320</td>
+            <td>30.7% / 0.253</td>
+          </tr>
+          <tr>
+            <td class="method">Naive Strategy 1</td>
+            <td>95.5% / 0.883</td>
+            <td>40.6% / 0.355</td>
+            <td>38.6% / 0.344</td>
+            <td>33.2% / 0.277</td>
+          </tr>
+          <tr>
+            <td class="method">Naive Strategy 2</td>
+            <td>95.8% / 0.898</td>
+            <td>41.1% / 0.363</td>
+            <td>39.4% / 0.351</td>
+            <td>33.9% / 0.291</td>
+          </tr>
+          <tr class="ours">
+            <td class="method">Ours</td>
+            <td>100% / 0.940</td>
+            <td>50.8% / 0.473</td>
+            <td>47.8% / 0.440</td>
+            <td>42.0% / 0.387</td>
+          </tr>
+        </tbody>
+        <tbody>
+          <tr>
+            <td class="dataset" rowspan="4">MM-SafetyBench</td>
+            <td class="method">Baseline (MLAI+PixArt-α)</td>
+            <td>93.7% / 0.891</td>
+            <td>40.2% / 0.387</td>
+            <td>37.2% / 0.321</td>
+            <td>32.9% / 0.271</td>
+          </tr>
+          <tr>
+            <td class="method">Naive Strategy 1</td>
+            <td>94.9% / 0.899</td>
+            <td>43.4% / 0.409</td>
+            <td>40.1% / 0.359</td>
+            <td>35.2% / 0.309</td>
+          </tr>
+          <tr>
+            <td class="method">Naive Strategy 2</td>
+            <td>95.1% / 0.907</td>
+            <td>44.1% / 0.418</td>
+            <td>40.8% / 0.363</td>
+            <td>35.6% / 0.311</td>
+          </tr>
+          <tr class="ours">
+            <td class="method">Ours</td>
+            <td>100% / 0.939</td>
+            <td>53.5% / 0.517</td>
+            <td>50.1% / 0.469</td>
+            <td>43.6% / 0.382</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="bibtex">
+    <h2>Citation</h2>
+    <div class="bibtex-wrap">
+      <button class="copy" onclick="copyBibtex(this)">Copy</button>
+<pre class="bibtex">@inproceedings{xiang2026widenet,
+  title     = {New Wide-Net-Casting Jailbreak Attacks Risk Large Models},
+  author    = {Xiang, Qiuchi and Qu, Haoxuan and Rahmani, Hossein and Liu, Jun},
+  booktitle = {Proceedings of the 43rd International Conference on Machine Learning (ICML)},
+  year      = {2026},
+}</pre>
+    </div>
+  </section>
+
+  <footer>
+    For questions or correspondence, please contact
+    <a href="mailto:q.xiang1@lancaster.ac.uk">q.xiang1@lancaster.ac.uk</a>.
+  </footer>
+
+</main>
+
+<script>
+  function copyBibtex(btn) {
+    const text = document.querySelector('pre.bibtex').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+</script>
+</body>
+</html>
